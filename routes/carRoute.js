@@ -21,6 +21,6 @@ router.delete(
   adminOrSuperAdminOnly,
   deletetCar
 );
-router.get("/api/v1/car:id", verifyToken, adminOrSuperAdminOnly, getCarById);
+router.get("/api/v1/car/:id", verifyToken, adminOrSuperAdminOnly, getCarById);
 
 module.exports = router;

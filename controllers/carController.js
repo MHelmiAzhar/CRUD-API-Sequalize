@@ -2,7 +2,13 @@ const { car, user } = require("../models");
 
 async function getCars(req, res) {
   try {
-    const data = await car.findAll();
+    const data = await car.findAll({
+      include: {
+        model: user,
+        attributes: ["id", "name", "email", "role"],
+      },
+      attributes: ["manufacture", "model", "price", "userId"],
+    });
 
     res.status(200).json({
       status: "success",
@@ -40,7 +46,13 @@ async function createCar(req, res) {
 async function getCarById(req, res) {
   try {
     const id = req.params.id;
-    const data = await car.findByPk(id);
+    const data = await car.findByPk(id, {
+      include: {
+        model: user,
+        attributes: ["id", "name", "email", "role"],
+      },
+      attributes: ["manufacture", "model", "price", "userId"],
+    });
 
     res.status(200).json({
       status: "success",
@@ -55,11 +67,14 @@ async function getCarById(req, res) {
 }
 async function updatetCar(req, res) {
   try {
-    const { name } = req.body;
+    const { manufacture, model, price } = req.body;
     const id = req.params.id;
     const data = await car.update(
       {
-        name,
+        manufacture: manufacture,
+        model: model,
+        price: price,
+        userId: req.user.id,
       },
       {
         where: { id },
@@ -68,8 +83,7 @@ async function updatetCar(req, res) {
 
     res.status(200).json({
       status: "success",
-      msg: `user dengan id ${id} berhasi diupdate`,
-      data,
+      msg: `Car Updated`,
     });
   } catch (error) {
     res.status(400).json({
@@ -87,8 +101,7 @@ async function deletetCar(req, res) {
 
     res.status(200).json({
       status: "success",
-      msg: `Mobil dengan id ${id} berhasi dihapus`,
-      data,
+      msg: `Car has been delete`,
     });
   } catch (error) {
     res.status(400).json({
