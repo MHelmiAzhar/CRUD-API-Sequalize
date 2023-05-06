@@ -8,8 +8,8 @@ module.exports = {
       "users",
       [
         {
-          name: "helmimidut",
-          email: "helmimidut@gmail.com",
+          name: "helmiazhar",
+          email: "helmiazhar@gmail.com",
           password: await bcrypt.hash("12345", 10), //setup with bcrypt encrypt
           role: "superadmin",
           createdAt: new Date(),

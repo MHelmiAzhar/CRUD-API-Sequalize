@@ -3,6 +3,9 @@ const { car, user } = require("../models");
 async function getCars(req, res) {
   try {
     const data = await car.findAll({
+      where: {
+        isDeleted: 0,
+      },
       include: {
         model: user,
         attributes: ["id", "name", "email", "role"],
@@ -30,6 +33,7 @@ async function createCar(req, res) {
       model: model,
       price: price,
       userId: req.user.id,
+      isDeleted: 0,
     });
 
     res.status(201).json({
@@ -46,7 +50,11 @@ async function createCar(req, res) {
 async function getCarById(req, res) {
   try {
     const id = req.params.id;
-    const data = await car.findByPk(id, {
+    const data = await car.findOne({
+      where: {
+        id,
+        isDeleted: 0,
+      },
       include: {
         model: user,
         attributes: ["id", "name", "email", "role"],
@@ -75,6 +83,7 @@ async function updatetCar(req, res) {
         model: model,
         price: price,
         userId: req.user.id,
+        isDeleted: 0,
       },
       {
         where: { id },
@@ -83,7 +92,7 @@ async function updatetCar(req, res) {
 
     res.status(200).json({
       status: "success",
-      msg: `Car Updated`,
+      msg: "Car Updated",
     });
   } catch (error) {
     res.status(400).json({
@@ -94,14 +103,24 @@ async function updatetCar(req, res) {
 }
 async function deletetCar(req, res) {
   try {
+    const { manufacture, model, price } = req.body;
     const id = req.params.id;
-    const data = await car.destroy({
-      where: { id },
-    });
+    const data = await car.update(
+      {
+        manufacture: manufacture,
+        model: model,
+        price: price,
+        userId: req.user.id,
+        isDeleted: 1,
+      },
+      {
+        where: { id },
+      }
+    );
 
     res.status(200).json({
       status: "success",
-      msg: `Car has been delete`,
+      msg: `Car has been deleted`,
     });
   } catch (error) {
     res.status(400).json({

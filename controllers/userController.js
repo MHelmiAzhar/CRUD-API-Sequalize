@@ -58,11 +58,12 @@ async function getUserById(req, res) {
 }
 async function updatetUser(req, res) {
   try {
-    const { name } = req.body;
+    const { name, email } = req.body;
     const id = req.params.id;
     const data = await user.update(
       {
         name,
+        email,
       },
       {
         where: { id },
@@ -71,7 +72,7 @@ async function updatetUser(req, res) {
 
     res.status(200).json({
       status: "success",
-      msg: `user dengan id ${id} berhasi diupdate`,
+      msg: "data has been update",
       data,
     });
   } catch (error) {
@@ -90,7 +91,7 @@ async function deletetUser(req, res) {
 
     res.status(200).json({
       status: "success",
-      msg: `user dengan id ${id} berhasi dihapus`,
+      msg: "data has been delete",
       data,
     });
   } catch (error) {
